@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiều Diễm Recap</title>
+<style>
+  :root{
+    --bg: #0b0710;
+    --bg-soft: #130a1c;
+    --panel: #1a0f27;
+    --purple: #7c2ae8;
+    --purple-deep: #4a1a8c;
+    --pink: #e63ea3;
+    --text: #f3eef9;
+    --text-dim: #b8a9c9;
+    --gold: #d9b568;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3{
+    font-family: Georgia, 'Times New Roman', serif;
+    letter-spacing: 0.5px;
+  }
+
+  a{text-decoration:none;color:inherit;}
+
+  ::-webkit-scrollbar{height:8px;width:8px;}
+  ::-webkit-scrollbar-thumb{background: var(--purple-deep); border-radius:10px;}
+  ::-webkit-scrollbar-track{background: var(--bg-soft);}
+
+  /* ===== HEADER ===== */
+  header{
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 18px 40px;
+    background: linear-gradient(180deg, rgba(11,7,16,0.95) 10%, rgba(11,7,16,0));
+    transition: background 0.4s ease;
+  }
+
+  header.scrolled{
+    background: rgba(11,7,16,0.92);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 20px rgba(124,42,232,0.15);
+  }
+
+  .logo{
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--gold), var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  nav ul{
+    display:flex;
+    gap: 28px;
+    list-style:none;
+  }
+
+  nav a{
+    font-size: 14.5px;
+    color: var(--text-dim);
+    font-weight:500;
+    position:relative;
+    transition: color 0.3s ease;
+  }
+
+  nav a:hover{ color: var(--text); }
+
+  nav a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:-6px;
+    width:0%; height:2px;
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    transition: width 0.3s ease;
+  }
+
+  nav a:hover::after{ width:100%; }
+
+  .menu-toggle{
+    display:none;
+    flex-direction:column;
+    gap:5px;
+    cursor:pointer;
+    background:none;
+    border:none;
+  }
+  .menu-toggle span{
+    width:26px; height:2px;
+    background: var(--text);
+    border-radius:2px;
+  }
+
+  /* ===== BANNER ===== */
+  .banner{
+    position:relative;
+    height: 92vh;
+    min-height: 480px;
+    display:flex;
+    align-items:flex-end;
+    background:
+      linear-gradient(180deg, rgba(11,7,16,0.1) 0%, rgba(11,7,16,0.55) 55%, var(--bg) 100%),
+      radial-gradient(ellipse at 70% 20%, rgba(124,42,232,0.35), transparent 60%),
+      linear-gradient(135deg, #1a0f27 0%, #2b1140 45%, #100a1a 100%);
+    overflow:hidden;
+  }
+
+  .banner::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.25), transparent),
+      radial-gradient(1.5px 1.5px at 60% 70%, rgba(255,255,255,0.15), transparent),
+      radial-gradient(1px 1px at 80% 20%, rgba(255,255,255,0.2), transparent);
+    background-size: 300px 300px;
+    opacity:0.5;
+    pointer-events:none;
+  }
+
+  .banner-content{
+    position:relative;
+    z-index:2;
+    padding: 0 40px 70px;
+    max-width: 680px;
+    animation: fadeUp 1s ease both;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(30px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .banner-tag{
+    display:inline-block;
+    font-size:12.5px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color: var(--gold);
+    border:1px solid rgba(217,181,104,0.4);
+    padding: 4px 12px;
+    border-radius: 30px;
+    margin-bottom: 18px;
+  }
+
+  .banner h1{
+    font-size: clamp(32px, 5vw, 58px);
+    line-height:1.1;
+    margin-bottom: 16px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+  }
+
+  .banner p{
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height:1.6;
+    margin-bottom: 26px;
+  }
+
+  .banner-actions{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight:600;
+    cursor:pointer;
+    border:none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+
+  .btn-primary{
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(124,42,232,0.4);
+  }
+
+  .btn-primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(230,62,163,0.5);
+  }
+
+  .btn-secondary{
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .btn-secondary:hover{
+    background: rgba(255,255,255,0.16);
+    transform: translateY(-2px);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section{
+    padding: 50px 40px;
+  }
+
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom: 22px;
+  }
+
+  .section-head h2{
+    font-size: 24px;
+    position:relative;
+    padding-left:16px;
+    border-left: 4px solid var(--pink);
+  }
+
+  .section-head span{
+    font-size:13px;
+    color: var(--text-dim);
+  }
+
+  /* ===== VIDEO ROW ===== */
+  .scroll-row{
+    display:flex;
+    gap: 20px;
+    overflow-x:auto;
+    padding-bottom: 14px;
+    scroll-snap-type: x proximity;
+  }
+
+  .video-card{
+    flex: 0 0 300px;
+    scroll-snap-align:start;
+    background: var(--panel);
+    border-radius: 14px;
+    overflow:hidden;
+    cursor:pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    border: 1px solid rgba(124,42,232,0.15);
+  }
+
+  .video-card:hover{
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(124,42,232,0.35);
+    border-color: rgba(230,62,163,0.4);
+  }
+
+  .video-thumb{
+    position:relative;
+    width:100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg,#2b1140,#1a0f27);
+    overflow:hidden;
+  }
+
+  .video-thumb img{
+    width:100%; height:100%;
+    object-fit:cover;
+    transition: transform 0.5s ease;
+  }
+
+  .video-card:hover .video-thumb img{
+    transform: scale(1.08);
+  }
+
+  .play-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,0.25);
+    opacity:0;
+    transition: opacity 0.3s ease;
+  }
+
+  .video-card:hover .play-overlay{ opacity:1; }
+
+  .play-icon{
+    width:54px; height:54px;
+    border-radius:50%;
+    background: rgba(230,62,163,0.9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 0 24px rgba(230,62,163,0.6);
+  }
+
+  .play-icon::before{
+    content:'';
+    border-style: solid;
+    border-width: 9px 0 9px 15px;
+    border-color: transparent transparent transparent #fff;
+    margin-left:3px;
+  }
+
+  .duration-badge{
+    position:absolute;
+    bottom:8px; right:8px;
+    background: rgba(0,0,0,0.75);
+    font-size:11.5px;
+    padding:2px 8px;
+    border-radius:5px;
+  }
+
+  .video-info{
+    padding: 14px 16px 16px;
+  }
+
+  .video-info h3{
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:6px;
+    line-height:1.4;
+    font-family: inherit;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  .video-meta{
+    font-size:12.5px;
+    color: var(--text-dim);
+    display:flex;
+    justify-content:space-between;
+  }
+
+  /* ===== NOVELS GRID ===== */
+  .novel-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 22px;
+  }
+
+  .novel-card{
+    background: var(--panel);
+    border-radius: 14px;
+    overflow:hidden;
+    cursor:pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    border: 1px solid rgba(124,42,232,0.15);
+  }
+
+  .novel-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 16px 36px rgba(124,42,232,0.3);
+    border-color: rgba(217,181,104,0.4);
+  }
+
+  .novel-cover{
+    width:100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(160deg, #2b1140, #4a1a8c);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:flex-end;
+  }
+
+  .novel-cover img{
+    width:100%; height:100%;
+    object-fit:cover;
+    position:absolute;
+    inset:0;
+    transition: transform 0.5s ease;
+  }
+
+  .novel-card:hover .novel-cover img{ transform: scale(1.06); }
+
+  .ai-badge{
+    position:absolute;
+    top:10px; left:10px;
+    z-index:2;
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    font-size:11px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius: 20px;
+    letter-spacing:0.5px;
+  }
+
+  .novel-rating{
+    position:absolute;
+    top:10px; right:10px;
+    z-index:2;
+    background: rgba(0,0,0,0.6);
+    font-size:11.5px;
+    color: var(--gold);
+    padding:3px 8px;
+    border-radius:20px;
+  }
+
+  .novel-info{
+    padding:14px;
+  }
+
+  .novel-info h3{
+    font-size:15px;
+    font-family: inherit;
+    margin-bottom:6px;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  .novel-info p{
+    font-size:12.5px;
+    color: var(--text-dim);
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  .genre-tags{
+    display:flex;
+    gap:6px;
+    margin-top:8px;
+    flex-wrap:wrap;
+  }
+
+  .genre-tags span{
+    font-size: 10.5px;
+    color: var(--purple);
+    background: rgba(124,42,232,0.15);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* ===== FOOTER ===== */
+  footer{
+    padding: 40px;
+    text-align:center;
+    color: var(--text-dim);
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 30px;
+  }
+
+  footer .logo{
+    font-size:20px;
+    display:block;
+    margin-bottom: 10px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px){
+    header{ padding: 14px 20px; }
+    nav{
+      position:absolute;
+      top:100%; left:0; right:0;
+      background: rgba(11,7,16,0.97);
+      backdrop-filter: blur(10px);
+      flex-direction:column;
+      max-height:0;
+      overflow:hidden;
+      transition: max-height 0.35s ease;
+    }
+    nav.open{ max-height: 280px; }
+    nav ul{
+      flex-direction:column;
+      padding: 16px 24px;
+      gap:18px;
+    }
+    .menu-toggle{ display:flex; }
+    .section{ padding: 36px 20px; }
+    .banner-content{ padding: 0 20px 50px; }
+  }
+
+  @media (max-width: 500px){
+    .video-card{ flex: 0 0 240px; }
+    .banner{ min-height: 420px; }
+    .btn{ padding: 11px 20px; font-size:14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <a href="#" class="logo">Kiều Diễm Recap</a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Mở menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="mainNav">
+    <ul>
+      <li><a href="#banner">Trang chủ</a></li>
+      <li><a href="#videos">Video Recap</a></li>
+      <li><a href="#novels">Tiểu Thuyết AI</a></li>
+      <li><a href="#">Thể loại</a></li>
+      <li><a href="#">Yêu thích</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="banner" id="banner">
+  <div class="banner-content">
+    <span class="banner-tag">Truyện Nổi Bật</span>
+    <h1>Kiều Diễm — Mỹ Nhân Loạn Thế</h1>
+    <p>
+      Một nữ tu sĩ bị phản bội tái sinh vào thân xác đệ nhất mỹ nhân kinh thành,
+      mang theo trí nhớ kiếp trước để báo thù và viết lại số phận giữa
+      chốn cung đình đầy âm mưu, tình ái và quyền lực.
+    </p>
+    <div class="banner-actions">
+      <button class="btn btn-primary">▶ Xem Recap Ngay</button>
+      <button class="btn btn-secondary">+ Đọc Tiểu Thuyết</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="videos">
+  <div class="section-head">
+    <h2>Video Recap Mới Nhất</h2>
+    <span>Cập nhật hàng ngày</span>
+  </div>
+  <div class="scroll-row">
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Recap Kiều Diễm Loạn Thế">
+        <div class="play-overlay"><div class="play-icon"></div></div>
+        <span class="duration-badge">12:45</span>
+      </div>
+      <div class="video-info">
+        <h3>Kiều Diễm Loạn Thế - Tập 1: Tái Sinh Báo Thù</h3>
+        <div class="video-meta"><span>120K lượt xem</span><span>2 ngày trước</span></div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img src="https://img.youtube.com/vi/jNQXAC9IVRw/hqdefault.jpg" alt="Recap Hậu Cung Tranh Sủng">
+        <div class="play-overlay"><div class="play-icon"></div></div>
+        <span class="duration-badge">15:20</span>
+      </div>
+      <div class="video-info">
+        <h3>Hậu Cung Tranh Sủng - Mưu Kế Của Hoàng Hậu</h3>
+        <div class="video-meta"><span>98K lượt xem</span><span>3 ngày trước</span></div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img src="https://img.youtube.com/vi/M7lc1UVf-VE/hqdefault.jpg" alt="Recap Phượng Hoàng Cửu Thiên">
+        <div class="play-overlay"><div class="play-icon"></div></div>
+        <span class="duration-badge">18:02</span>
+      </div>
+      <div class="video-info">
+        <h3>Phượng Hoàng Cửu Thiên - Trận Chiến Cuối Cùng</h3>
+        <div class="video-meta"><span>210K lượt xem</span><span>5 ngày trước</span></div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img src="https://img.youtube.com/vi/9bZkp7q19f0/hqdefault.jpg" alt="Recap Thiên Kim Phục Hận">
+        <div class="play-overlay"><div class="play-icon"></div></div>
+        <span class="duration-badge">10:33</span>
+      </div>
+      <div class="video-info">
+        <h3>Thiên Kim Phục Hận - Lật Mặt Kẻ Hãm Hại</h3>
+        <div class="video-meta"><span>76K lượt xem</span><span>1 tuần trước</span></div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="Recap Hoàng Phi Lạnh Lùng">
+        <div class="play-overlay"><div class="play-icon"></div></div>
+        <span class="duration-badge">14:10</span>
+      </div>
+      <div class="video-info">
+        <h3>Hoàng Phi Lạnh Lùng - Bí Mật Thân Phận</h3>
+        <div class="video-meta"><span>54K lượt xem</span><span>1 tuần trước</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="novels">
+  <div class="section-head">
+    <h2>Tiểu Thuyết AI</h2>
+    <span>Sáng tác bởi AI - Cập nhật liên tục</span>
+  </div>
+  <div class="novel-grid">
+
+    <div class="novel-card">
+      <div class="novel-cover">
+        <img src="https://placehold.co/300x400/2b1140/d9b568?text=Ki%E1%BB%81u+Di%E1%BB%85m" alt="Bìa truyện Kiều Diễm Loạn Thế">
+        <span class="ai-badge">AI VIẾT</span>
+        <span class="novel-rating">★ 4.9</span>
+      </div>
+      <div class="novel-info">
+        <h3>Kiều Diễm Loạn Thế</h3>
+        <p>Tái sinh báo thù, mỹ nhân khuynh đảo triều cương, viết lại vận mệnh đã định.</p>
+        <div class="genre-tags"><span>Cổ trang</span><span>Báo thù</span></div>
+      </div>
+    </div>
+
+    <div class="novel-card">
+      <div class="novel-cover">
+        <img src="https://placehold.co/300x400/4a1a8c/d9b568?text=H%E1%BA%ADu+Cung" alt="Bìa truyện Hậu Cung Tranh Sủng">
+        <span class="ai-badge">AI VIẾT</span>
+        <span class="novel-rating">★ 4.7</span>
+      </div>
+      <div class="novel-info">
+        <h3>Hậu Cung Tranh Sủng</h3>
+        <p>Mưu kế chốn hậu cung, ai sẽ là người cuối cùng đứng trên đỉnh quyền lực.</p>
+        <div class="genre-tags"><span>Cung đấu</span><span>Tình cảm</span></div>
+      </div>
+    </div>
+
+    <div class="novel-card">
+      <div class="novel-cover">
+        <img src="https://placehold.co/300x400/1a0f27/e63ea3?text=Ph%C6%B0%E1%BB%A3ng+Ho%C3%A0ng" alt="Bìa truyện Phượng Hoàng Cửu Thiên">
+        <span class="ai-badge">AI VIẾT</span>
+        <span class="novel-rating">★ 4.8</span>
+      </div>
+      <div class="novel-info">
+        <h3>Phượng Hoàng Cửu Thiên</h3>
+        <p>Hành trình tu luyện nghịch thiên của một linh hồn mang theo ký ức ngàn năm.</p>
+        <div class="genre-tags"><span>Tu tiên</span><span>Huyền huyễn</span></div>
+      </div>
+    </div>
+
+    <div class="novel-card">
+      <div class="novel-cover">
+        <img src="https://placehold.co/300x400/2b1140/f3eef9?text=Thi%C3%AAn+Kim" alt="Bìa truyện Thiên Kim Phục Hận">
+        <span class="ai-badge">AI VIẾT</span>
+        <span class="novel-rating">★ 4.6</span>
+      </div>
+      <div class="novel-info">
+        <h3>Thiên Kim Phục Hận</h3>
+        <p>Từ tiểu thư bị hãm hại đến bậc kỳ nữ khiến cả kinh thành phải cúi đầu.</p>
+        <div class="genre-tags"><span>Hiện đại</span><span>Báo thù</span></div>
+      </div>
+    </div>
+
+    <div class="novel-card">
+      <div class="novel-cover">
+        <img src="https://placehold.co/300x400/4a1a8c/f3eef9?text=Ho%C3%A0ng+Phi" alt="Bìa truyện Hoàng Phi Lạnh Lùng">
+        <span class="ai-badge">AI VIẾT</span>
+        <span class="novel-rating">★ 4.5</span>
+      </div>
+      <div class="novel-info">
+        <h3>Hoàng Phi Lạnh Lùng</h3>
+        <p>Ẩn giấu thân phận thật, nàng âm thầm thao túng cả ván cờ chính sự.</p>
+        <div class="genre-tags"><span>Cổ trang</span><span>Bí ẩn</span></div>
+      </div>
+    </div>
+
+    <div class="novel-card">
+      <div class="novel-cover">
+        <img src="https://placehold.co/300x400/1a0f27/d9b568?text=V%C5%A9+Linh" alt="Bìa truyện Vũ Linh Cửu Trọng Thiên">
+        <span class="ai-badge">AI VIẾT</span>
+        <span class="novel-rating">★ 4.9</span>
+      </div>
+      <div class="novel-info">
+        <h3>Vũ Linh Cửu Trọng Thiên</h3>
+        <p>Chín tầng trời cao, một bước chân định đoạt cả vận số nhân gian.</p>
+        <div class="genre-tags"><span>Huyền huyễn</span><span>Phiêu lưu</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <span class="logo">Kiều Diễm Recap</span>
+  <p>© 2026 Kiều Diễm Recap. Nội dung truyện và video chỉ mang tính chất giải trí.</p>
+</footer>
+
+<script>
+  // Hiệu ứng đổi nền header khi cuộn
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 30) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // Menu mobile
+  const menuToggle = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+  menuToggle.addEventListener('click', () => {
+    mainNav.classList.toggle('open');
+  });
+
+  // Đóng menu mobile khi chọn 1 mục
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', () => mainNav.classList.remove('open'));
+  });
+
+  // Click vào video card -> demo mở placeholder (không có link thật)
+  document.querySelectorAll('.video-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.style.transform = 'scale(0.97)';
+      setTimeout(() => card.style.transform = '', 150);
+    });
+  });
+</script>
+
+</body>
+</html>
